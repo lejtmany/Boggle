@@ -10,7 +10,7 @@ namespace BoggleGame
 
     public static class WordIndex
     {
-        public static ImmutableDictionary<HashSet<char>, ImmutableList<string>> CreateIndex(IEnumerable<string> words)
+        public static ImmutableDictionary<IImmutableSet<char>, ImmutableList<string>> CreateIndex(IEnumerable<string> words)
         {
             var index = new Dictionary<HashSet<char>, IList<string>>(HashSet<char>.CreateSetComparer());
             foreach (string word in words)
@@ -23,10 +23,10 @@ namespace BoggleGame
                 index[letters].Add(word);
             }
 
-            var immutableIndex = new Dictionary<HashSet<char>, ImmutableList<string>>();
+            var immutableIndex = new Dictionary<IImmutableSet<char>, ImmutableList<string>>();
             foreach (HashSet<char> key in index.Keys)
             {
-                immutableIndex[key] = index[key].ToImmutableList<string>();
+                immutableIndex[key.ToImmutableHashSet()] = index[key].ToImmutableList<string>();
             }
 
             return immutableIndex.ToImmutableDictionary();
