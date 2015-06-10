@@ -8,11 +8,22 @@ using System.Collections.Immutable;
 namespace BoggleGame
 {
 
-    public static class WordIndex
+    public class WordIndex
     {
-        public static ImmutableDictionary<IImmutableSet<char>, ImmutableList<string>> CreateIndex(IEnumerable<string> words)
+
+        private IImmutableDictionary<IImmutableSet<char>, IImmutableList<string>> wordDictionary;
+
+        public WordIndex(IEnumerable<string> words)
+        {
+            var index = ConstructDictionary(words);
+
+            wordDictionary = MakeDictionaryImmutable(index);
+        }
+
+        private static Dictionary<HashSet<char>, IList<string>> ConstructDictionary(IEnumerable<string> words)
         {
             var index = new Dictionary<HashSet<char>, IList<string>>(HashSet<char>.CreateSetComparer());
+
             foreach (string word in words)
             {
                 HashSet<char> letters = new HashSet<char>(word);
@@ -22,14 +33,28 @@ namespace BoggleGame
                 }
                 index[letters].Add(word);
             }
+            return index;
+        }
 
-            var immutableIndex = new Dictionary<IImmutableSet<char>, ImmutableList<string>>();
+        private static ImmutableDictionary<IImmutableSet<char>, IImmutableList<string>> MakeDictionaryImmutable(Dictionary<HashSet<char>, IList<string>> index)
+        {
+            var immutableIndex = new Dictionary<IImmutableSet<char>, IImmutableList<string>>();
             foreach (HashSet<char> key in index.Keys)
             {
                 immutableIndex[key.ToImmutableHashSet()] = index[key].ToImmutableList<string>();
             }
-
             return immutableIndex.ToImmutableDictionary();
+        }
+
+        public IList<string> ListPossibleWords(ISet<char> set)
+        {
+            var wordList = new List<string>();
+            foreach (var key in wordDictionary.Keys)
+            {
+                if (key.IsSubsetOf(set))
+                    wordList.AddRange(wordDictionary[key]);
+            }
+            return wordList;
         }
 
 
