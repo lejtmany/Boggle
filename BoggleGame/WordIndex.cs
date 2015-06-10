@@ -20,6 +20,13 @@ namespace BoggleGame
                 return new List<ISet<char>>(wordDictionary.Keys);
             }
         }
+        
+        public IList<string> this[HashSet<char> s]{
+            get
+            {
+                return new List<string>(wordDictionary[s]);
+            }
+        }
 
         public WordIndex(IEnumerable<string> words)
         {
