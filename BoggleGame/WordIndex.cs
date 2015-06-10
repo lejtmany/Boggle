@@ -13,11 +13,11 @@ namespace BoggleGame
 
         private ImmutableDictionary<HashSet<char>, ISet<string>> wordDictionary;
         
-        public IEnumerable<ISet<char>> Keys
+        public IEnumerable<HashSet<char>> Keys
         {
             get
             {
-                return new List<ISet<char>>(wordDictionary.Keys);
+                return new List<HashSet<char>>(wordDictionary.Keys);
             }
         }
         
