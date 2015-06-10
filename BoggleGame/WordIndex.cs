@@ -11,13 +11,19 @@ namespace BoggleGame
     public class WordIndex
     {
 
-        private IImmutableDictionary<IImmutableSet<char>, IImmutableList<string>> wordDictionary;
+        private ImmutableDictionary<HashSet<char>, IList<string>> wordDictionary;
+        
+        public IEnumerable<ISet<char>> Letters
+        {
+            get
+            {
+                return new List<ISet<char>>(wordDictionary.Keys);
+            }
+        }
 
         public WordIndex(IEnumerable<string> words)
         {
-            var index = ConstructDictionary(words);
-
-            wordDictionary = MakeDictionaryImmutable(index);
+            wordDictionary = ConstructDictionary(words).ToImmutableDictionary();
         }
 
         private static Dictionary<HashSet<char>, IList<string>> ConstructDictionary(IEnumerable<string> words)
@@ -36,15 +42,6 @@ namespace BoggleGame
             return index;
         }
 
-        private static ImmutableDictionary<IImmutableSet<char>, IImmutableList<string>> MakeDictionaryImmutable(Dictionary<HashSet<char>, IList<string>> index)
-        {
-            var immutableIndex = new Dictionary<IImmutableSet<char>, IImmutableList<string>>();
-            foreach (HashSet<char> key in index.Keys)
-            {
-                immutableIndex[key.ToImmutableHashSet()] = index[key].ToImmutableList<string>();
-            }
-            return immutableIndex.ToImmutableDictionary();
-        }
 
         public IList<string> ListPossibleWords(ISet<char> set)
         {
@@ -56,7 +53,6 @@ namespace BoggleGame
             }
             return wordList;
         }
-
 
     }
 }
