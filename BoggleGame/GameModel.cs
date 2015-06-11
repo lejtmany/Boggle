@@ -43,8 +43,8 @@ namespace BoggleGame
             }
         }
 
-        public readonly ushort RoundSetSize { get; private set; }
-        public readonly ushort ScoreIncrement{get; private set;}
+        public ushort RoundSetSize { get; private set; }
+        public ushort ScoreIncrement{get; private set;}
 
         private readonly WordIndex wordIndex;
         private ISet<string> possibleMatches;
@@ -57,10 +57,10 @@ namespace BoggleGame
             this.RoundSetSize = roundSetSize;
             this.ScoreIncrement = scoreIncrement;
             Score = 0;
-            InitRound();
+            NewRound();
         }
 
-        private void InitRound()
+        public void NewRound()
         {
             roundLetters = GetRandomSet(RoundSetSize);
             possibleMatches = wordIndex[roundLetters];
