@@ -17,14 +17,14 @@ namespace BoggleGame
         {
             get
             {
-                return new List<HashSet<char>>(wordDictionary.Keys);
+                return wordDictionary.Keys;
             }
         }
         
         public ISet<string> this[HashSet<char> s]{
             get
             {
-                return new HashSet<string>(wordDictionary[s]);
+                return GetPossibleWords(s);
             }
         }
 
@@ -50,15 +50,15 @@ namespace BoggleGame
         }
 
 
-        public IList<string> ListPossibleWords(ISet<char> set)
+        public ISet<string> GetPossibleWords(ISet<char> set)
         {
-            var wordList = new List<string>();
+            var wordSet = new HashSet<string>();
             foreach (var key in wordDictionary.Keys)
             {
                 if (key.IsSubsetOf(set))
-                    wordList.AddRange(wordDictionary[key]);
+                    wordSet.UnionWith(wordDictionary[key]);
             }
-            return wordList;
+            return wordSet;
         }
 
     }
