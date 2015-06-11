@@ -7,13 +7,6 @@ namespace WordIndexTests
     [TestClass]
     public class GameModelTests
     {
-        private GameModel gm = new GameModel("WordList.txt");
-
-
-        [TestMethod]
-        public void TestMethod1()
-        {
-            
-        }
+       
     }
 }

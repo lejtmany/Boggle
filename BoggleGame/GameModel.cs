@@ -19,37 +19,63 @@ namespace BoggleGame
             }
         }
 
-        private readonly WordIndex wordList;
-        private readonly IList<HashSet<char>> randomSets;
+        public ISet<string> MatchesFound
+        {
+            get
+            {
+                return matchesFound.ToImmutableHashSet<string>();
+            }
+        }
 
-        private HashSet<char> roundLetters;
+        public ISet<string> MatchesNotFound
+        {
+            get
+            {
+                return possibleMatches.Except(matchesFound).ToImmutableHashSet<string>();
+            }
+        }
+
+        public ISet<string> PossibleMatches
+        {
+            get
+            {
+                return possibleMatches.ToImmutableHashSet<string>();
+            }
+        }
+
+        public readonly ushort RoundSetSize { get; private set; }
+        public readonly ushort ScoreIncrement{get; private set;}
+
+        private readonly WordIndex wordIndex;
         private ISet<string> possibleMatches;
+        private HashSet<char> roundLetters;
         private ISet<string> matchesFound;
 
-        public GameModel(string filePath)
+        public GameModel(WordIndex wordIndex, ushort roundSetSize = 7, ushort scoreIncrement = 10)
         {
-            wordList = new WordIndex(File.ReadAllLines(filePath));
-            randomSets = GetRandomSets();
+            this.wordIndex = wordIndex;
+            this.RoundSetSize = roundSetSize;
+            this.ScoreIncrement = scoreIncrement;
+            Score = 0;
             InitRound();
         }
 
         private void InitRound()
         {
-            roundLetters = randomSets[0];
-            possibleMatches = wordList[roundLetters];
+            roundLetters = GetRandomSet(RoundSetSize);
+            possibleMatches = wordIndex[roundLetters];
             matchesFound = new HashSet<string>();
         }
 
-        private IList<HashSet<char>> GetRandomSets()
-        {
-            var rnd = new Random();
-            IList<HashSet<char>> sizedSets = (from s in wordList.Keys
-                                              where s.Count >= 4 && s.Count <= 10
-                                              select s).ToList();
-            //shuffle list
-            sizedSets.OrderBy(item => rnd.Next());
 
-            return sizedSets;
+        private HashSet<char> GetRandomSet(int size)
+        {
+
+            var alphabet = "abcdefghijklmnopqrstuvwxyz";
+            var rnd = new Random();
+            var result = Enumerable.Repeat(alphabet, size)
+                .Select(s => s[rnd.Next(s.Length)]);
+            return new HashSet<char>(result);
         }
 
         public bool SubmitString(string word)
@@ -58,13 +84,14 @@ namespace BoggleGame
             if (wordFound)
             {
                 matchesFound.Add(word);
+                Score += ScoreIncrement;
             }
             return wordFound;
         }
 
         private bool CheckString(string word)
         {
-            return wordList[roundLetters].Contains(word);
+            return wordIndex[roundLetters].Contains(word);
         }
 
 
