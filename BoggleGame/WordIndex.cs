@@ -12,7 +12,7 @@ namespace BoggleGame
     {
 
         private ImmutableDictionary<HashSet<char>, ISet<string>> wordDictionary;
-        
+
         public IEnumerable<HashSet<char>> Keys
         {
             get
@@ -20,8 +20,9 @@ namespace BoggleGame
                 return wordDictionary.Keys;
             }
         }
-        
-        public ISet<string> this[HashSet<char> s]{
+
+        public ISet<string> this[HashSet<char> s]
+        {
             get
             {
                 return GetPossibleWords(s);
@@ -44,7 +45,7 @@ namespace BoggleGame
                 {
                     index[letters] = new HashSet<string>();
                 }
-                index[letters].Add(word);
+                index[letters].Add(word.ToLower().Trim());
             }
             return index;
         }
@@ -52,6 +53,7 @@ namespace BoggleGame
 
         public ISet<string> GetPossibleWords(ISet<char> set)
         {
+            set = SetToLowerCase(set);
             var wordSet = new HashSet<string>();
             foreach (var key in wordDictionary.Keys)
             {
@@ -59,6 +61,13 @@ namespace BoggleGame
                     wordSet.UnionWith(wordDictionary[key]);
             }
             return wordSet;
+        }
+
+        private static ISet<char> SetToLowerCase(ISet<char> set)
+        {
+            IEnumerable<char> lowerSet = from c in set
+                                         select Convert.ToChar(c.ToString().ToLower());
+            return new HashSet<char>(lowerSet);
         }
 
     }
