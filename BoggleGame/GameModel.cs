@@ -8,13 +8,20 @@ using System.IO;
 
 namespace BoggleGame
 {
-    class GameModel
+    public class GameModel
     {
         public uint Score { get; private set; }
+        public ISet<char> RoundLetters
+        {
+            get
+            {
+                return new HashSet<char>(roundLetters);
+            }
+        }
 
         private readonly WordIndex wordList;
         private readonly IList<HashSet<char>> randomSets;
-       
+
         private HashSet<char> roundLetters;
         private ISet<string> possibleMatches;
         private ISet<string> matchesFound;
@@ -37,11 +44,11 @@ namespace BoggleGame
         {
             var rnd = new Random();
             IList<HashSet<char>> sizedSets = (from s in wordList.Keys
-                                           where s.Count >= 4 && s.Count <= 10
-                                           select s).ToList();
+                                              where s.Count >= 4 && s.Count <= 10
+                                              select s).ToList();
             //shuffle list
             sizedSets.OrderBy(item => rnd.Next());
-            
+
             return sizedSets;
         }
 
@@ -55,7 +62,8 @@ namespace BoggleGame
             return wordFound;
         }
 
-        private bool CheckString(string word){
+        private bool CheckString(string word)
+        {
             return wordList[roundLetters].Contains(word);
         }
 
