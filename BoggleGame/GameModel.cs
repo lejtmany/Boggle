@@ -11,11 +11,12 @@ namespace BoggleGame
     public class GameModel
     {
         public uint Score { get; private set; }
-        public ISet<char> RoundLetters
+        private string roundLetters;
+        public string RoundLetters
         {
             get
             {
-                return new HashSet<char>(roundLetters);
+                return roundLetters;
             }
         }
 
@@ -48,10 +49,9 @@ namespace BoggleGame
 
         private readonly WordIndex wordIndex;
         private ISet<string> possibleMatches;
-        private HashSet<char> roundLetters;
         private ISet<string> matchesFound;
 
-        public GameModel(WordIndex wordIndex, ushort roundSetSize = 7, ushort scoreIncrement = 10)
+        public GameModel(WordIndex wordIndex, ushort roundSetSize = 8, ushort scoreIncrement = 10)
         {
             this.wordIndex = wordIndex;
             this.RoundSetSize = roundSetSize;
@@ -68,14 +68,17 @@ namespace BoggleGame
         }
 
 
-        private HashSet<char> GetRandomSet(int size)
+        private string GetRandomSet(int size)
         {
 
-            var alphabet = "abcdefghijklmnopqrstuvwxyz";
+            var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             var rnd = new Random();
-            var result = Enumerable.Repeat(alphabet, size)
-                .Select(s => s[rnd.Next(s.Length)]);
-            return new HashSet<char>(result);
+            var sb = new StringBuilder();
+            for (int i = 0; i < size; i++)
+            {
+                sb.Append(alphabet[rnd.Next((alphabet.Length - 1) + 1)]);
+            }
+            return sb.ToString();
         }
 
         public bool SubmitString(string word)

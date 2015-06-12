@@ -21,7 +21,7 @@ namespace BoggleGame
             }
         }
 
-        public ISet<string> this[HashSet<char> s]
+        public ISet<string> this[string s]
         {
             get
             {
@@ -51,9 +51,9 @@ namespace BoggleGame
         }
 
 
-        public ISet<string> GetPossibleWords(ISet<char> set)
+        public ISet<string> GetPossibleWords(string set)
         {
-            set = SetToLowerCase(set);
+            set = set.ToLower();
             var wordSet = new HashSet<string>();
             foreach (var key in wordDictionary.Keys)
             {
@@ -63,12 +63,7 @@ namespace BoggleGame
             return wordSet;
         }
 
-        private static ISet<char> SetToLowerCase(ISet<char> set)
-        {
-            IEnumerable<char> lowerSet = from c in set
-                                         select Convert.ToChar(c.ToString().ToLower());
-            return new HashSet<char>(lowerSet);
-        }
+       
 
     }
 }

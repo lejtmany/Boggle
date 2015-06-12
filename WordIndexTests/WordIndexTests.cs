@@ -20,26 +20,22 @@ namespace WordIndexTests
         [TestMethod]
         public void TestIndexer()
         {
-            var letterSet = new HashSet<char>("mace");
-            var possibleWords = wi[letterSet];
-            possibleWords.Should().OnlyContain(s => new HashSet<char>(s).IsSubsetOf(letterSet));
+            var possibleWords = wi["mace"];
+            possibleWords.Should().OnlyContain(s => new HashSet<char>(s).IsSubsetOf("mace"));
         }
 
         [TestMethod]
         public void TestIndexerWhenNoMatches()
         {
-            var letterSet = new HashSet<char>("z");
-            var possibleWords = wi[letterSet];
+            var possibleWords = wi["z"];
             possibleWords.Count.Should().Be(0);
         }
 
         [TestMethod]
         public void TestIndexerWhenCapitalsInSet()
         {
-            var key = "MaCE";
-            var letterSet = new HashSet<char>(key);
-            var possibleWords = wi[letterSet];
-            possibleWords.Should().OnlyContain(s => new HashSet<char>(s).IsSubsetOf(new HashSet<char>(key.ToLower())));
+            var possibleWords = wi["MaCE"];
+            possibleWords.Should().OnlyContain(s => new HashSet<char>(s).IsSubsetOf(new HashSet<char>("mace".ToLower())));
         }
 
     }

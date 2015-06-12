@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using BoggleGame;
 using FluentAssertions;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace WordIndexTests
 {
@@ -16,13 +17,17 @@ namespace WordIndexTests
         [TestMethod]
         public void TestNewLetterSetEveryTime()
         {
-            var setList = new List<ISet<char>>();
+            var lettersList = new List<string>();
             for (int i = 0; i < 100; i++)
             {
-                setList.Add(gm.RoundLetters);
                 gm.NewRound();
+                lettersList.Add(gm.RoundLetters);               
             }
-            setList.Should().OnlyHaveUniqueItems();
+            lettersList.Distinct().Count().ShouldBeEquivalentTo(lettersList.Count);
         }
+
     }
+
+    
 }
+
