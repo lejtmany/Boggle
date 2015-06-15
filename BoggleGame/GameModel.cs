@@ -46,6 +46,7 @@ namespace BoggleGame
 
         public ushort RoundSetSize { get; private set; }
         public ushort ScoreIncrement{get; private set;}
+        public ushort LeastNumberOfMatches{get; private set;}
 
         private readonly Random rnd = new Random();
 
@@ -53,11 +54,12 @@ namespace BoggleGame
         private ISet<string> possibleMatches;
         private ISet<string> matchesFound;
 
-        public GameModel(WordIndex wordIndex, ushort roundSetSize = 8, ushort scoreIncrement = 10)
+        public GameModel(WordIndex wordIndex, ushort roundSetSize = 8, ushort scoreIncrement = 10, ushort leastNumberOfMatches = 12)
         {
             this.wordIndex = wordIndex;
             this.RoundSetSize = roundSetSize;
             this.ScoreIncrement = scoreIncrement;
+            this.LeastNumberOfMatches = leastNumberOfMatches;
             Score = 0;
             NewRound();
         }
@@ -75,6 +77,7 @@ namespace BoggleGame
 
             var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             var sb = new StringBuilder();
+            while (wordIndex[sb.ToString()].Count < 10)
             for (int i = 0; i < size; i++)
             {
                 sb.Append(alphabet[rnd.Next((alphabet.Length - 1) + 1)]);

@@ -11,7 +11,7 @@ namespace WordIndexTests
     [TestClass]
     public class GameModelTests
     {
-        WordIndex wi = new WordIndex(File.ReadAllLines("WordList.txt"));
+        WordIndex wi = new WordIndex(File.ReadAllLines("WordList.txt").Where((s,i)=> i % 3 == 0));
         GameModel gm;
         [TestInitialize]
         public void Setup()
@@ -43,6 +43,19 @@ namespace WordIndexTests
             var match = gm.PossibleMatches.ElementAt(0);
             gm.SubmitString(match);
             gm.Score.ShouldBeEquivalentTo(gm.ScoreIncrement);
+        }
+
+        [TestMethod]
+        public void IncorrectMatchesShouldNotIncrementScore()
+        {
+            gm.SubmitString("afreiyfgriaegaib");
+            gm.Score.ShouldBeEquivalentTo(0);
+        }
+
+        [TestMethod]
+        public void TestThatPossibleMatchesForEachLetterSet()
+        {
+            wi[gm.RoundLetters].Count.Should().BeGreaterOrEqualTo(gm.LeastNumberOfMatches);
         }
 
     }

@@ -48,18 +48,30 @@ namespace BoggleGame
         {
             var wordSet = new HashSet<string>();
             letters = NormalizeString(letters);
+            var candidateKeys = GetCandidateKeys(letters);
+            foreach (var key in candidateKeys)
+            {
+                var wordsWithin = GetSubsetWords(letters, wordDictionary[key]);
+                wordSet.UnionWith(wordsWithin);
+            }
+            return wordSet;
+        }
+
+        private IEnumerable<string> GetSubsetWords(string letters, ISet<string> words)
+        {
+            var wordsWithin = from w in words
+                              where w.IsContainedWithin(letters)
+                              select w;
+            return wordsWithin;
+        }
+
+        private IEnumerable<HashSet<char>> GetCandidateKeys(string letters)
+        {
             var lettersSet = new HashSet<char>(letters);
             var candidateKeys = from k in wordDictionary.Keys
                                 where k.IsSubsetOf(lettersSet)
                                 select k;
-            foreach (var key in candidateKeys)
-            {
-                var wordsWithin = from w in wordDictionary[key]
-                                  where w.IsContainedWithin(letters)
-                                  select w;
-                wordSet.UnionWith(wordsWithin);
-            }
-            return wordSet;
+            return candidateKeys;
         }
 
         private static string NormalizeString(string s){
