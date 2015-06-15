@@ -28,7 +28,7 @@ namespace BoggleGame
 
         private static Dictionary<HashSet<char> , ISet<string>> ConstructDictionary(IEnumerable<string> words)
         {
-            var index = new Dictionary<HashSet<char>, ISet<string>>();
+            var index = new Dictionary<HashSet<char>, ISet<string>>(HashSet<char>.CreateSetComparer());
 
             foreach (string word in words)
             {
