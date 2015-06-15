@@ -11,15 +11,7 @@ namespace BoggleGame
     public class WordIndex
     {
 
-        private ImmutableDictionary<HashSet<char>, ISet<string>> wordDictionary;
-
-        public IEnumerable<HashSet<char>> Keys
-        {
-            get
-            {
-                return wordDictionary.Keys;
-            }
-        }
+        private ImmutableDictionary<string, ISet<string>> wordDictionary;
 
         public ISet<string> this[string s]
         {
@@ -34,36 +26,57 @@ namespace BoggleGame
             wordDictionary = ConstructDictionary(words).ToImmutableDictionary();
         }
 
-        private static Dictionary<HashSet<char>, ISet<string>> ConstructDictionary(IEnumerable<string> words)
+        private static Dictionary<string, ISet<string>> ConstructDictionary(IEnumerable<string> words)
         {
-            var index = new Dictionary<HashSet<char>, ISet<string>>(HashSet<char>.CreateSetComparer());
+            var index = new Dictionary<string, ISet<string>>();
 
             foreach (string word in words)
             {
-                HashSet<char> letters = new HashSet<char>(word);
-                if (!index.Keys.Contains(letters))
+                var key = NormalizeString(String.Concat(word.OrderBy(c => c)));
+                if (!index.Keys.Contains(key))
                 {
-                    index[letters] = new HashSet<string>();
+                    index[key] = new HashSet<string>();
                 }
-                index[letters].Add(word.ToLower().Trim());
+                index[key].Add(NormalizeString(word));
             }
             return index;
         }
 
 
-        public ISet<string> GetPossibleWords(string set)
+        public ISet<string> GetPossibleWords(string letters)
         {
-            set = set.ToLower();
             var wordSet = new HashSet<string>();
+            letters = NormalizeString(letters);
             foreach (var key in wordDictionary.Keys)
             {
-                if (key.IsSubsetOf(set))
+                if (key.IsContainedWithin(letters))
                     wordSet.UnionWith(wordDictionary[key]);
             }
             return wordSet;
         }
 
-       
+        private static string NormalizeString(string s){
+            return s.ToUpper().Trim();
+        }
+
+        static void Main()
+        {
+            Console.WriteLine("git".IsContainedWithin("light"));
+            Console.WriteLine("pall".IsContainedWithin("lamp"));
+            Console.WriteLine("mace".IsContainedWithin("macee"));
+            Console.ReadLine();
+        }
 
     }
+
+     static class Extensions
+    {
+        public static bool IsContainedWithin(this string s, string other)
+        {
+            var lookup = other.ToLookup(c=>c);
+            return s.ToLookup(c => c).All(c => lookup[c.Key].Count() >= c.Count());
+        }
+    }
+
+    
 }

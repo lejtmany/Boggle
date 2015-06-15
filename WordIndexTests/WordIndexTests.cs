@@ -11,17 +11,19 @@ namespace WordIndexTests
     [TestClass]
     public class WordIndexTests
     {
-        //       WordIndex wi = new WordIndex(File.ReadAllLines(Directory.GetCurrentDirectory))
 
         private WordIndex wi =
-            new WordIndex(new List<string>() { "bog", "glob", "mate", "tame", "at", "me", "sylvester", "mace" });
+            new WordIndex(new List<string>() { "bog", "glob", "mate", "tame", "at", "me", "sylvester", "mace", "met", "meet", "ace", "came", "macee", "a" });
 
 
         [TestMethod]
         public void TestIndexer()
         {
             var possibleWords = wi["mace"];
-            possibleWords.Should().OnlyContain(s => new HashSet<char>(s).IsSubsetOf("mace"));
+            int origCount = possibleWords.Count;
+            possibleWords.UnionWith(new List<string>() {"MACE", "ACE", "CAME", "A", "ME"});
+            int newCount = possibleWords.Count;
+            origCount.ShouldBeEquivalentTo(newCount);
         }
 
         [TestMethod]
@@ -35,7 +37,14 @@ namespace WordIndexTests
         public void TestIndexerWhenCapitalsInSet()
         {
             var possibleWords = wi["MaCE"];
-            possibleWords.Should().OnlyContain(s => new HashSet<char>(s).IsSubsetOf(new HashSet<char>("mace".ToLower())));
+            possibleWords.Should().OnlyContain(s => new HashSet<char>(s).IsSubsetOf(new HashSet<char>("mace".ToUpper())));
+        }
+
+        [TestMethod]
+        public void TestAccountsForDuplicates()
+        {
+            var possibleWords = wi["mace"];
+            possibleWords.Should().NotContain("MACEE");
         }
 
     }
