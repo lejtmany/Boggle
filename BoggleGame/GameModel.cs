@@ -47,6 +47,8 @@ namespace BoggleGame
         public ushort RoundSetSize { get; private set; }
         public ushort ScoreIncrement{get; private set;}
 
+        private readonly Random rnd = new Random();
+
         private readonly WordIndex wordIndex;
         private ISet<string> possibleMatches;
         private ISet<string> matchesFound;
@@ -72,7 +74,6 @@ namespace BoggleGame
         {
 
             var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            var rnd = new Random();
             var sb = new StringBuilder();
             for (int i = 0; i < size; i++)
             {

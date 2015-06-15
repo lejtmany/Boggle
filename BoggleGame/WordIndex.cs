@@ -11,7 +11,7 @@ namespace BoggleGame
     public class WordIndex
     {
 
-        private ImmutableDictionary<string, ISet<string>> wordDictionary;
+        private ImmutableDictionary<HashSet<char>, ISet<string>> wordDictionary;
 
         public ISet<string> this[string s]
         {
@@ -26,13 +26,14 @@ namespace BoggleGame
             wordDictionary = ConstructDictionary(words).ToImmutableDictionary();
         }
 
-        private static Dictionary<string, ISet<string>> ConstructDictionary(IEnumerable<string> words)
+        private static Dictionary<HashSet<char> , ISet<string>> ConstructDictionary(IEnumerable<string> words)
         {
-            var index = new Dictionary<string, ISet<string>>();
+            var index = new Dictionary<HashSet<char>, ISet<string>>();
 
             foreach (string word in words)
             {
-                var key = NormalizeString(String.Concat(word.OrderBy(c => c)));
+            //    var key = NormalizeString(String.Concat(word.OrderBy(c => c)));
+                var key = new HashSet<char>(NormalizeString(word));
                 if (!index.Keys.Contains(key))
                 {
                     index[key] = new HashSet<string>();
@@ -47,10 +48,16 @@ namespace BoggleGame
         {
             var wordSet = new HashSet<string>();
             letters = NormalizeString(letters);
-            foreach (var key in wordDictionary.Keys)
+            var lettersSet = new HashSet<char>(letters);
+            var candidateKeys = from k in wordDictionary.Keys
+                                where k.IsSubsetOf(lettersSet)
+                                select k;
+            foreach (var key in candidateKeys)
             {
-                if (key.IsContainedWithin(letters))
-                    wordSet.UnionWith(wordDictionary[key]);
+                var wordsWithin = from w in wordDictionary[key]
+                                  where w.IsContainedWithin(letters)
+                                  select w;
+                wordSet.UnionWith(wordsWithin);
             }
             return wordSet;
         }
@@ -78,5 +85,4 @@ namespace BoggleGame
         }
     }
 
-    
 }
