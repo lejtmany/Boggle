@@ -11,7 +11,7 @@ namespace WordIndexTests
     [TestClass]
     public class GameModelTests
     {
-        WordIndex wi = new WordIndex(File.ReadAllLines("WordList.txt").Where((s,i)=> i % 3 == 0));
+        WordIndex wi = new WordIndex(File.ReadAllLines("WordList.txt").Where((s,i)=> i % 15 == 0));
         GameModel gm;
         [TestInitialize]
         public void Setup()
@@ -56,6 +56,12 @@ namespace WordIndexTests
         public void TestThatPossibleMatchesForEachLetterSet()
         {
             wi[gm.RoundLetters].Count.Should().BeGreaterOrEqualTo(gm.LeastNumberOfMatches);
+        }
+
+        [TestMethod]
+        public void LetterSetShouldBeRightSize()
+        {
+            gm.RoundLetters.Length.ShouldBeEquivalentTo(gm.RoundSetSize);
         }
 
     }

@@ -77,10 +77,13 @@ namespace BoggleGame
 
             var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             var sb = new StringBuilder();
-            while (wordIndex[sb.ToString()].Count < 10)
-            for (int i = 0; i < size; i++)
+            while (wordIndex[sb.ToString()].Count < LeastNumberOfMatches)
             {
-                sb.Append(alphabet[rnd.Next((alphabet.Length - 1) + 1)]);
+                sb.Clear();
+                for (int i = 0; i < size; i++)
+                {
+                    sb.Append(alphabet[rnd.Next((alphabet.Length - 1) + 1)]);
+                }
             }
             return sb.ToString();
         }
