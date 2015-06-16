@@ -81,9 +81,9 @@
             // SelectedLettersTB
             // 
             this.SelectedLettersTB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.SelectedLettersTB.Enabled = false;
             this.SelectedLettersTB.Location = new System.Drawing.Point(0, 88);
             this.SelectedLettersTB.Name = "SelectedLettersTB";
+            this.SelectedLettersTB.ReadOnly = true;
             this.SelectedLettersTB.Size = new System.Drawing.Size(584, 20);
             this.SelectedLettersTB.TabIndex = 3;
             // 
@@ -99,9 +99,9 @@
             // ScoreLabel
             // 
             this.ScoreLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ScoreLabel.Enabled = false;
             this.ScoreLabel.Location = new System.Drawing.Point(3, 3);
             this.ScoreLabel.Name = "ScoreLabel";
+            this.ScoreLabel.ReadOnly = true;
             this.ScoreLabel.Size = new System.Drawing.Size(100, 20);
             this.ScoreLabel.TabIndex = 0;
             // 
@@ -115,8 +115,6 @@
             this.WordsFoundBox.SelectionMode = System.Windows.Forms.SelectionMode.None;
             this.WordsFoundBox.Size = new System.Drawing.Size(584, 420);
             this.WordsFoundBox.TabIndex = 5;
-            this.WordsFoundBox.SelectedIndexChanged += new System.EventHandler(this.WordsFoundBox_SelectedIndexChanged);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);

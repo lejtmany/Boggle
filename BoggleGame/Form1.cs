@@ -30,7 +30,7 @@ namespace BoggleGame
             gm.SubmitString(SelectedLettersTB.Text);
             ScoreLabel.Text = gm.Score.ToString();
             ClearButton_Click(sender, e);
-            WordsFoundBox.DataSource = gm.MatchesFound.ToList();
+            WordsFoundBox.DataSource = GetWordList();
         }
 
         void ClearButton_Click(object sender, EventArgs e)
@@ -60,26 +60,20 @@ namespace BoggleGame
 
         }
 
-        void LetterButton_Click(object sender, EventArgs e)
+        private void LetterButton_Click(object sender, EventArgs e)
         {
             var button = (Button)sender;
             SelectedLettersTB.AppendText(button.Text);
             button.Enabled = false;
         }
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
+        private IEnumerable<string> GetWordList()
         {
-
+            var lookup = (from s in gm.PossibleMatches
+                          orderby s.Length
+                          select String.Concat(Enumerable.Repeat("_ ", s.Length))).ToLookup(item => item.Count());
+            return lookup.SelectMany(x=>x).OrderBy(s=>s.Length).ToArray();
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void WordsFoundBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 }
