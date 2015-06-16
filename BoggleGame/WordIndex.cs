@@ -78,14 +78,6 @@ namespace BoggleGame
             return s.ToUpper().Trim();
         }
 
-        static void Main()
-        {
-            Console.WriteLine("git".IsContainedWithin("light"));
-            Console.WriteLine("pall".IsContainedWithin("lamp"));
-            Console.WriteLine("mace".IsContainedWithin("macee"));
-            Console.ReadLine();
-        }
-
     }
 
      static class Extensions

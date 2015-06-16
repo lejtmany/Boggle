@@ -91,7 +91,7 @@ namespace BoggleGame
         public bool SubmitString(string word)
         {
             bool wordFound = CheckString(word);
-            if (wordFound)
+            if (wordFound && !matchesFound.Contains(word))
             {
                 matchesFound.Add(word);
                 Score += ScoreIncrement;

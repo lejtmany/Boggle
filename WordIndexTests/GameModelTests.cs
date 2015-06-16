@@ -64,6 +64,15 @@ namespace WordIndexTests
             gm.RoundLetters.Length.ShouldBeEquivalentTo(gm.RoundSetSize);
         }
 
+        [TestMethod]
+        public void TestThatDontGetPointsForSameWord()
+        {
+            var match = gm.PossibleMatches.ElementAt(0);
+            gm.SubmitString(match);
+            gm.SubmitString(match);
+            gm.Score.ShouldBeEquivalentTo(gm.ScoreIncrement);
+        }
+
     }
 
 

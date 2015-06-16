@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace BoggleGame
 {
@@ -11,13 +12,13 @@ namespace BoggleGame
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
-    /*    [STAThread]
+        [STAThread]
         static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            var gm = new GameModel(new WordIndex(File.ReadAllLines("WordList.txt")));
+            Application.Run(new Form1(gm));
         }
-     */
     }
 }
