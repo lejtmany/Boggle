@@ -94,7 +94,7 @@ namespace BoggleGame
             if (wordFound && !matchesFound.Contains(word))
             {
                 matchesFound.Add(word);
-                Score += ScoreIncrement;
+                Score += ScoreIncrement * word.Length;
             }
             return wordFound;
         }

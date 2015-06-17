@@ -10,33 +10,91 @@ using System.Windows.Forms;
 
 namespace BoggleGame
 {
-    public partial class Form1 : Form
+    public partial class WordShuffleForm : Form
     {
-        GameModel gm;
-        IList<Button> letterButtonList;
+        private readonly GameModel gm;
+        private Random rnd = new Random();
+        private uint roundLength;
+        private uint secondsLeft;
 
-        public Form1(GameModel gm)
+        public WordShuffleForm(GameModel gm, uint roundLength = 120)
         {
             InitializeComponent();
             this.gm = gm;
-            letterButtonList = new List<Button>();
+            this.roundLength = roundLength;
+            this.secondsLeft = roundLength;
             AddButtonsToPanel(gm.RoundLetters);
             ClearButton.Click += ClearButton_Click;
             SubmitButton.Click += SubmitButton_Click;
+            NewRoundButton.Click += NewRoundButton_Click;
+            ShuffleButton.Click += ShuffleButton_Click;
+            RefreshInfo();
+            Timer.Tick += Timer_Tick;
+            Timer.Enabled = true;
+
+            NewRoundButton.Enabled = false;
         }
+
+        void ShuffleButton_Click(object sender, EventArgs e)
+        {
+            ClearButton_Click(sender, e);
+            AddButtonsToPanel(String.Concat(gm.RoundLetters.ToCharArray().OrderBy(s => (rnd.Next(2) % 2) == 0)));
+        }
+
+        void NewRoundButton_Click(object sender, EventArgs e)
+        {
+            NewRoundButton.Enabled = false;
+            EnableControlButtons(true);
+            gm.NewRound();
+            AddButtonsToPanel(gm.RoundLetters);
+            RefreshInfo();
+            secondsLeft = roundLength;
+            Timer.Enabled = true;
+        }
+
+        void Timer_Tick(object sender, EventArgs e)
+        {
+            TimerLabel.Text = "Time Remaining: " + secondsLeft;
+            secondsLeft--;
+            if (secondsLeft <= 0)
+            {
+                RoundOver();
+            }
+        }
+
+        private void RoundOver()
+        {
+            Timer.Enabled = false;
+            WordsFoundBox.DataSource = gm.PossibleMatches.OrderBy(s => s.Length).ToList();
+            NewRoundButton.Enabled = true;
+            EnableControlButtons(false);
+        }
+
+        private void EnableControlButtons(bool enable)
+        {
+            SubmitButton.Enabled = enable;
+            ClearButton.Enabled = enable;
+            ShuffleButton.Enabled = enable;
+        }
+        
 
         void SubmitButton_Click(object sender, EventArgs e)
         {
             gm.SubmitString(SelectedLettersTB.Text);
-            ScoreLabel.Text = gm.Score.ToString();
             ClearButton_Click(sender, e);
+            RefreshInfo();
+        }
+
+        private void RefreshInfo()
+        {
+            ScoreLabel.Text = "Score: " + gm.Score.ToString();
             WordsFoundBox.DataSource = GetWordList();
         }
 
         void ClearButton_Click(object sender, EventArgs e)
         {
             SelectedLettersTB.Text = "";
-            foreach (var button in letterButtonList)
+            foreach (Button button in JumbledLetterPanel.Controls)
             {
                 button.Enabled = true;
             }
@@ -44,7 +102,7 @@ namespace BoggleGame
 
         private void AddButtonsToPanel(string letterString)
         {
-            letterButtonList.Clear();
+            JumbledLetterPanel.Controls.Clear();
             foreach (char letter in letterString)
             {
                 var button = new Button();
@@ -54,7 +112,6 @@ namespace BoggleGame
                 button.Padding = new Padding(0);
                 button.Margin = new Padding(0);
                 button.Click += LetterButton_Click;
-                letterButtonList.Add(button);
                 JumbledLetterPanel.Controls.Add(button);
             }
 
@@ -69,10 +126,11 @@ namespace BoggleGame
 
         private IEnumerable<string> GetWordList()
         {
-            var lookup = (from s in gm.PossibleMatches
-                          orderby s.Length
-                          select String.Concat(Enumerable.Repeat("_ ", s.Length))).ToLookup(item => item.Count());
-            return lookup.SelectMany(x=>x).OrderBy(s=>s.Length).ToArray();
+            var list = from s in gm.MatchesNotFound
+                       orderby s.Length
+                       select String.Concat(Enumerable.Repeat("_ ", s.Length));
+            list = list.Concat(gm.MatchesFound);
+            return list.OrderBy(s => s.Replace("_ ", "_").Length).ThenBy(s=>s.Replace("_ ", "ZZZZZ")).ToArray();
         }
 
     }

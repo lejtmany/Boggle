@@ -18,7 +18,7 @@ namespace BoggleGame
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             var gm = new GameModel(new WordIndex(File.ReadAllLines("WordList.txt")));
-            Application.Run(new Form1(gm));
+            Application.Run(new WordShuffleForm(gm));
         }
     }
 }
