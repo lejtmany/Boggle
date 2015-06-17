@@ -18,7 +18,7 @@ namespace BoggleGame
         private uint roundLength;
         private uint secondsLeft;
 
-        public WordShuffleForm(GameModel gm, uint roundLength = 12)
+        public WordShuffleForm(GameModel gm, uint roundLength = 120)
         {
             InitializeComponent();
             this.gm = gm;
