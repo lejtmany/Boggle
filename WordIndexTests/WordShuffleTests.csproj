@@ -67,9 +67,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BoggleGame\BoggleGame.csproj">
+    <ProjectReference Include="..\BoggleGame\WordShuffle.csproj">
       <Project>{a91b398f-b11e-47e9-bf33-f9f8fc8fe8d5}</Project>
-      <Name>BoggleGame</Name>
+      <Name>WordShuffle</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

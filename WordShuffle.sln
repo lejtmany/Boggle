@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Express 2013 for Windows Desktop
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoggleGame", "BoggleGame\BoggleGame.csproj", "{A91B398F-B11E-47E9-BF33-F9F8FC8FE8D5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordShuffle", "BoggleGame\WordShuffle.csproj", "{A91B398F-B11E-47E9-BF33-F9F8FC8FE8D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoggleGameTests", "WordIndexTests\BoggleGameTests.csproj", "{4715BE8A-A301-4865-A699-7E9AAFB43552}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordShuffleTests", "WordIndexTests\WordShuffleTests.csproj", "{4715BE8A-A301-4865-A699-7E9AAFB43552}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
