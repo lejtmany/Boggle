@@ -157,6 +157,7 @@
             this.WordsFoundBox.SelectionMode = System.Windows.Forms.SelectionMode.None;
             this.WordsFoundBox.Size = new System.Drawing.Size(584, 404);
             this.WordsFoundBox.TabIndex = 5;
+            this.WordsFoundBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.WordsFoundBox_DrawItem);
             // 
             // Timer
             // 

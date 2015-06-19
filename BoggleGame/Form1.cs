@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -31,7 +32,7 @@ namespace BoggleGame
             RefreshInfo();
             Timer.Tick += Timer_Tick;
             Timer.Enabled = true;
-
+            WordsFoundBox.DrawMode = DrawMode.OwnerDrawFixed;
             NewRoundButton.Enabled = false;
         }
 
@@ -54,8 +55,8 @@ namespace BoggleGame
 
         void Timer_Tick(object sender, EventArgs e)
         {
-            TimerLabel.Text = "Time Remaining: " + secondsLeft;
             secondsLeft--;
+            TimerLabel.Text = "Time Remaining: " + secondsLeft;
             if (secondsLeft <= 0)
             {
                 RoundOver();
@@ -131,6 +132,20 @@ namespace BoggleGame
                        select String.Concat(Enumerable.Repeat("_ ", s.Length));
             list = list.Concat(gm.MatchesFound);
             return list.OrderBy(s => s.Replace("_ ", "_").Length).ThenBy(s=>s.Replace("_ ", "ZZZZZ")).ToArray();
+        }
+
+        private void WordsFoundBox_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            e.DrawBackground();
+            Brush foundColor = Brushes.Black;
+            Brush notFoundColor = Brushes.Red;
+            Brush brush;
+            String itemText = WordsFoundBox.Items[e.Index].ToString();
+            if (gm.MatchesFound.Contains(itemText) || !Regex.IsMatch(itemText, @"^[a-zA-Z]+$"))
+                brush = foundColor;
+            else
+                brush = notFoundColor;
+            e.Graphics.DrawString(itemText, WordsFoundBox.Font, brush, e.Bounds);
         }
 
     }
